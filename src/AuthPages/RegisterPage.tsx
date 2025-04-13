@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthApi } from '../api/apis/AuthApi'; // путь к API клиенту
+import { RegisterDto } from '../api/models'; // путь к моделям
 
 const RegisterPage: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [name, setName] = useState<string>('');
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-    const handleForm = (e: React.FormEvent) => {
+    const handleForm = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(email, password, name);
+        setError(null);
+
+        const api = new AuthApi(); // можно передать конфигурацию если нужно
+        const registerDto: RegisterDto = { email, password, name };
+
+        try {
+            await api.v1AuthRegisterPost({ registerDto });
+            navigate('/login');
+        } catch (err: any) {
+            setError('Ошибка регистрации. Проверьте введённые данные.');
+            console.error(err);
+        }
     };
 
     return (
@@ -21,9 +36,7 @@ const RegisterPage: React.FC = () => {
                             <h4 className="card-title text-center mb-4">Регистрация</h4>
                             <form onSubmit={handleForm}>
                                 <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">
-                                        Email адрес
-                                    </label>
+                                    <label htmlFor="email" className="form-label">Email адрес</label>
                                     <input
                                         type="email"
                                         className="form-control"
@@ -35,9 +48,7 @@ const RegisterPage: React.FC = () => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="email" className="form-label">
-                                        Имя
-                                    </label>
+                                    <label htmlFor="name" className="form-label">Имя</label>
                                     <input
                                         type="text"
                                         className="form-control"
@@ -49,9 +60,7 @@ const RegisterPage: React.FC = () => {
                                     />
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="password" className="form-label">
-                                        Пароль
-                                    </label>
+                                    <label htmlFor="password" className="form-label">Пароль</label>
                                     <input
                                         type="password"
                                         className="form-control"
@@ -62,12 +71,13 @@ const RegisterPage: React.FC = () => {
                                         required
                                     />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100">
-                                    Регистрация
-                                </button>
-                                <Link to={"/login"}>
-                                    Есть аккаунт? Войти
-                                </Link>
+
+                                {error && <div className="alert alert-danger">{error}</div>}
+
+                                <button type="submit" className="btn btn-primary w-100">Регистрация</button>
+                                <div className="text-center mt-2">
+                                    <Link to="/login">Есть аккаунт? Войти</Link>
+                                </div>
                             </form>
                         </div>
                     </div>
