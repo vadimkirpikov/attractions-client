@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.1",
-  "info": {
-    "title": "TouristServer",
-    "version": "1.0"
-  },
   "servers": [
     {
       "url": "http://localhost:8080"
     }
   ],
+  "info": {
+    "title": "TouristServer",
+    "version": "1.0"
+  },
   "paths": {
     "/v1/auth/login": {
       "post": {
@@ -344,7 +344,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Place"
+                    "$ref": "#/components/schemas/PlaceDto"
                   }
                 }
               },
@@ -352,7 +352,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Place"
+                    "$ref": "#/components/schemas/PlaceDto"
                   }
                 }
               },
@@ -360,7 +360,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Place"
+                    "$ref": "#/components/schemas/PlaceDto"
                   }
                 }
               }

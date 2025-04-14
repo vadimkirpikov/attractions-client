@@ -16,14 +16,11 @@
 import * as runtime from '../runtime';
 import type {
   FilterDto,
-  Place,
   PlaceDto,
 } from '../models/index';
 import {
     FilterDtoFromJSON,
     FilterDtoToJSON,
-    PlaceFromJSON,
-    PlaceToJSON,
     PlaceDtoFromJSON,
     PlaceDtoToJSON,
 } from '../models/index';
@@ -84,7 +81,7 @@ export class PlacesApi extends runtime.BaseAPI {
 
     /**
      */
-    async v1PlacesPostRaw(requestParameters: V1PlacesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Place>>> {
+    async v1PlacesPostRaw(requestParameters: V1PlacesPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<PlaceDto>>> {
         const queryParameters: any = {};
 
         if (requestParameters['page'] != null) {
@@ -115,12 +112,12 @@ export class PlacesApi extends runtime.BaseAPI {
             body: FilterDtoToJSON(requestParameters['filterDto']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PlaceFromJSON));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(PlaceDtoFromJSON));
     }
 
     /**
      */
-    async v1PlacesPost(requestParameters: V1PlacesPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Place>> {
+    async v1PlacesPost(requestParameters: V1PlacesPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<PlaceDto>> {
         const response = await this.v1PlacesPostRaw(requestParameters, initOverrides);
         return await response.value();
     }
