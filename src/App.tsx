@@ -17,7 +17,7 @@ const App: React.FC = () => {
                 <Route path="/dashboard" element={<PersonalPage />} />
                 <Route path="/create-route" element={<CreateRoutePage />} />
                 <Route path="/routes/:id?" element={<RoutePage />} />
-                <Route path="/place/:id" element={<PlacePage />}/>
+                <Route path="/places/:id" element={<PlacePage />}/>
             </Routes>
         </Router>
     )

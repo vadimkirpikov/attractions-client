@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {UserRoutesApi, Configuration} from "../api";
 import RouteRow from "./RouteRow.tsx";
 import tryRefreshToken from "../Utils/tokenRefresher.ts";
-import getAccessToken from "../Utils/getAcessToken.ts"; // Путь к вашему API
+import getAccessToken from "../Utils/getAcessToken.ts";
 
 const RoutesTable = () => {
     const [simpleRoutes, setSimpleRoutes] = useState<any>([]);
