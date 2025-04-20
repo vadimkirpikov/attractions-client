@@ -6,6 +6,7 @@ import PersonalPage from "./UserRoutes/PersonalPage.tsx";
 import RoutePage from "./UserRoutes/RoutePage.tsx";
 import CreateRoutePage from "./UserRoutes/CreateRoutePage.tsx";
 import PlacePage from "./Places/PlacePage.tsx";
+import PlaceList from "./Places/PlaceList.tsx";
 
 
 const App: React.FC = () => {
@@ -17,7 +18,9 @@ const App: React.FC = () => {
                 <Route path="/dashboard" element={<PersonalPage />} />
                 <Route path="/create-route" element={<CreateRoutePage />} />
                 <Route path="/routes/:id?" element={<RoutePage />} />
+                <Route path="/places" element={<PlaceList />}/>
                 <Route path="/places/:id" element={<PlacePage />}/>
+
             </Routes>
         </Router>
     )
