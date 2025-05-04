@@ -10,7 +10,7 @@ const tryRefreshToken = async (error: any) => {
 
             const newToken = await authApi.v1AuthRefreshPost(requestInit);
             console.log("New", newToken.token);
-            localStorage.setItem("token", newToken.token);
+            localStorage.setItem("token", newToken.token as string);
         }
         catch {
             console.error("Error getting token", error);

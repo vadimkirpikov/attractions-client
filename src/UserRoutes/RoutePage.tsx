@@ -5,6 +5,7 @@ import getAccessToken from "../Utils/getAcessToken.ts";
 import tryRefreshToken from "../Utils/tokenRefresher.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../state/authSlice.ts";
+import PlaceList from "../Places/PlaceList.tsx";
 
 const RoutePage = () => {
     const { id } = useParams();
@@ -50,6 +51,7 @@ const RoutePage = () => {
             <div>
                 Маршрут имя {route?.name} id {route.id}
             </div>
+            <PlaceList isPreview={false} />
         </>
     )
 }

@@ -18,7 +18,7 @@ const App: React.FC = () => {
                 <Route path="/dashboard" element={<PersonalPage />} />
                 <Route path="/create-route" element={<CreateRoutePage />} />
                 <Route path="/routes/:id?" element={<RoutePage />} />
-                <Route path="/places" element={<PlaceList />}/>
+                <Route path="/places" element={<PlaceList isPreview={true} />}/>
                 <Route path="/places/:id" element={<PlacePage />}/>
 
             </Routes>
