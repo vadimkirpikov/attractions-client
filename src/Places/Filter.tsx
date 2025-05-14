@@ -8,7 +8,6 @@ interface FilterProps {
 }
 
 const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
-    // Keep existing state and logic
     const [filterDto, setFilterDto] = useState<FilterDto | undefined>({
         constMin: null,
         constMax: null,
@@ -19,16 +18,12 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
     const [districts, setDistricts] = useState<Array<District>>([]);
 
     const handleSubmit = async () => {
-        // Prepare the DTO: ensure empty arrays if nothing is selected,
-        // and convert price strings back to numbers (or null/undefined).
         const dtoToSend: FilterDto = {
             constMin: filterDto?.constMin ? Number(filterDto.constMin) : null,
             constMax: filterDto?.constMax ? Number(filterDto.constMax) : null,
             categoryIds: filterDto?.categoryIds ?? [],
             districtIds: filterDto?.districtIds ?? [],
         };
-        // Ensure empty arrays are not submitted if undefined was intended by API
-        // Adjust this based on how your API handles empty filters vs null filters
         await onSubmit(dtoToSend);
     };
 
@@ -48,12 +43,9 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
 
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        // Store price as string temporarily to allow empty input, convert on submit
-        // Or handle parsing directly, ensuring NaN is handled
         setFilterDto((prev) => ({
             ...prev!,
-            // Use name attribute directly matching FilterDto keys
-            [name]: value === '' ? null : value // Store as string or null
+            [name]: value === '' ? null : value
         }));
     };
 
@@ -74,10 +66,9 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
                     setDistricts(dists ?? []);
                 } catch (error: any) {
                     console.error("Failed to fetch categories/districts:", error);
-                    // Handle specific errors if needed
                     if (error.response && error.response.status === 401) {
                         console.log("Attempting token refresh for categories/districts fetch...");
-                        await tryRefreshToken(error); // Assuming tryRefreshToken returns boolean or throws
+                        await tryRefreshToken(error);
                         const [categs, dists] = await Promise.all([
                             api.v1CategoriesGet(),
                             api.v1DistrictsGet()
@@ -85,33 +76,29 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
                         setCategories(categs ?? []);
                         setDistricts(dists ?? []);
                     } else {
-                        // Handle other errors (network, server error, etc.)
                         console.error("An unexpected error occurred:", error);
                     }
                 }
             };
-            await apiGetUtils(); // Call the function
+            await apiGetUtils();
         };
         fetchOthers();
-    }, []); // Empty dependency array means this runs once on mount
+    }, []);
 
     return (
-        // Use Bootstrap Card for visual grouping
-        <div className="card sticky-top" style={{ top: '20px' }}> {/* sticky-top makes it stay visible on scroll */}
+        <div className="card sticky-top" style={{ top: '20px' }}>
             <div className="card-body">
                 <h5 className="card-title mb-3">Фильтры</h5>
-
-                {/* Price Range */}
                 <div className="mb-3">
                     <label htmlFor="constMin" className="form-label">Минимальная стоимость</label>
                     <input
                         type="number"
                         id="constMin"
-                        name="constMin" // Match state key
-                        value={filterDto?.constMin ?? ""} // Use ?? for null/undefined
+                        name="constMin"
+                        value={filterDto?.constMin ?? ""}
                         onChange={handlePriceChange}
-                        className="form-control form-control-sm" // Smaller input
-                        min="0" // Basic validation
+                        className="form-control form-control-sm"
+                        min="0"
                     />
                 </div>
                 <div className="mb-3">
@@ -119,15 +106,14 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
                     <input
                         type="number"
                         id="constMax"
-                        name="constMax" // Match state key
-                        value={filterDto?.constMax ?? ""} // Use ?? for null/undefined
+                        name="constMax"
+                        value={filterDto?.constMax ?? ""}
                         onChange={handlePriceChange}
-                        className="form-control form-control-sm" // Smaller input
-                        min="0" // Basic validation
+                        className="form-control form-control-sm"
+                        min="0"
                     />
                 </div>
 
-                {/* Categories */}
                 <div className="mb-3">
                     <h6>Категории</h6>
                     {categories.length > 0 ? categories.map((category) => (
@@ -146,8 +132,6 @@ const Filter: React.FC<FilterProps> = ({ onSubmit }) => {
                         </div>
                     )) : <small className="text-muted">Категории не найдены.</small>}
                 </div>
-
-                {/* Districts */}
                 <div className="mb-3">
                     <h6>Районы</h6>
                     {districts.length > 0 ? districts.map((district) => (

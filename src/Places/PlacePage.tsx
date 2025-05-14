@@ -68,7 +68,6 @@ const PlacePage: React.FC = () => {
     if (isLoading) {
         return (
             <div className="container text-center mt-5">
-                {/* Spinner using native Bootstrap classes */}
                 <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Загрузка...</span>
                 </div>
@@ -80,7 +79,6 @@ const PlacePage: React.FC = () => {
     if (error) {
         return (
             <div className="container mt-4">
-                {/* Alert using native Bootstrap classes */}
                 <div className="alert alert-danger" role="alert">
                     {error}
                 </div>
@@ -91,7 +89,6 @@ const PlacePage: React.FC = () => {
     if (!place) {
         return (
             <div className="container mt-4">
-                {/* Warning Alert using native Bootstrap classes */}
                 <div className="alert alert-warning" role="alert">
                     Информация о месте недоступна.
                 </div>
@@ -104,57 +101,24 @@ const PlacePage: React.FC = () => {
         : 'Бесплатно или цена не указана';
 
     return (
-        // Container using native Bootstrap class
         <div className="container mt-4 mb-5">
-            {/* Row using native Bootstrap class */}
             <div className="row">
-                {/* Column 1: Images */}
-                {/* Column using native Bootstrap class */}
                 <div className="col-md-6 mb-4 mb-md-0">
                     {place.photosUrl && place.photosUrl.length > 0 ? (
-                        // Simple Image Gallery using Bootstrap Grid
-                        <div className="row g-2"> {/* Use g-2 for small gutters */}
+                        <div className="row g-2">
                             {place.photosUrl.map((photo, index) => (
                                 photo ? (
-                                    // Display first image larger, others smaller? Or all in a grid.
-                                    // Let's do a grid for now. col-6 makes 2 images per row.
                                     <div className="col-6" key={index}>
                                         <img
                                             src={photo}
                                             alt={`${place.name ?? 'Место'} - Фото ${index + 1}`}
-                                            className="img-fluid rounded" // Responsive image, rounded corners
-                                            style={{ maxHeight: '250px', width: '100%', objectFit: 'cover' }} // Control size
+                                            className="img-fluid rounded"
+                                            style={{ maxHeight: '250px', width: '100%', objectFit: 'cover' }}
                                         />
                                     </div>
                                 ) : null
                             ))}
                         </div>
-
-                        // Alternative: If you wanted a *very* basic Carousel structure manually
-                        // You would need state for activeIndex and buttons to change it
-                        // <div id="placeImageCarousel" className="carousel slide" data-bs-ride="carousel">
-                        //     <div className="carousel-inner">
-                        //         {place.photosUrl.map((photo, index) => (
-                        //             photo ? (
-                        //                 <div className={`carousel-item ${index === activeIndex ? 'active' : ''}`} key={index}>
-                        //                     <img src={photo} className="d-block w-100 rounded" alt={`Slide ${index + 1}`} style={{ maxHeight: '500px', objectFit: 'cover' }}/>
-                        //                 </div>
-                        //             ) : null
-                        //         ))}
-                        //     </div>
-                        //     {place.photosUrl.length > 1 && (
-                        //         <>
-                        //             <button className="carousel-control-prev" type="button" data-bs-target="#placeImageCarousel" data-bs-slide="prev">
-                        //                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                        //                 <span className="visually-hidden">Previous</span>
-                        //             </button>
-                        //             <button className="carousel-control-next" type="button" data-bs-target="#placeImageCarousel" data-bs-slide="next">
-                        //                 <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                        //                 <span className="visually-hidden">Next</span>
-                        //             </button>
-                        //         </>
-                        //     )}
-                        // </div>
                     ) : (
                         <div className="text-center text-muted border rounded p-5 d-flex align-items-center justify-content-center" style={{ minHeight: '300px' }}>
                             Нет доступных изображений
@@ -162,25 +126,18 @@ const PlacePage: React.FC = () => {
                     )}
                 </div>
 
-                {/* Column 2: Text Details */}
-                {/* Column using native Bootstrap class */}
                 <div className="col-md-6">
-                    {/* Place Name */}
                     <h1 className="mb-3">{place.name ?? 'Название не указано'}</h1>
 
-                    {/* Category and District Badges */}
                     <div className="mb-3">
                         {place.categoryName && (
-                            // Badge using native Bootstrap classes
                             <span className="badge text-bg-info me-2 p-2">{place.categoryName}</span>
                         )}
                         {place.districtName && (
-                            // Badge using native Bootstrap classes
                             <span className="badge text-bg-secondary p-2">{place.districtName}</span>
                         )}
                     </div>
 
-                    {/* Description */}
                     <div className="mb-4">
                         <h4>Описание</h4>
                         <p style={{ whiteSpace: 'pre-wrap' }}>
@@ -188,13 +145,11 @@ const PlacePage: React.FC = () => {
                         </p>
                     </div>
 
-                    {/* Cost */}
                     <div className="mb-4">
                         <h4>Стоимость</h4>
-                        <p className="fs-5">{formattedCost}</p> {/* fs-5 for larger font size */}
+                        <p className="fs-5">{formattedCost}</p>
                     </div>
 
-                    {/* Map Link */}
                     {place.latitude && place.longitude && (
                         <div className="mb-4">
                             <h4>Местоположение</h4>
@@ -202,12 +157,11 @@ const PlacePage: React.FC = () => {
                                 href={`https://yandex.ru/maps/?pt=${place.longitude},${place.latitude}&z=16&l=map`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                // Button styling using native Bootstrap classes
                                 className="btn btn-outline-primary btn-sm"
                             >
                                 Посмотреть на карте (Yandex)
                             </a>
-                            <span className="ms-2 text-muted small"> {/* ms-2 for margin start */}
+                            <span className="ms-2 text-muted small">
                                 ({place.latitude.toFixed(4)}, {place.longitude.toFixed(4)})
                             </span>
                         </div>

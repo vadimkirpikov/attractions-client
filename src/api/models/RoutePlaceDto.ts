@@ -31,6 +31,30 @@ export interface RoutePlaceDto {
      * @memberof RoutePlaceDto
      */
     placeId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoutePlaceDto
+     */
+    placeName?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoutePlaceDto
+     */
+    latitude?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoutePlaceDto
+     */
+    longitude?: number | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof RoutePlaceDto
+     */
+    cost?: number;
 }
 
 /**
@@ -52,6 +76,10 @@ export function RoutePlaceDtoFromJSONTyped(json: any, ignoreDiscriminator: boole
         
         'placePosition': json['placePosition'] == null ? undefined : json['placePosition'],
         'placeId': json['placeId'] == null ? undefined : json['placeId'],
+        'placeName': json['placeName'] == null ? undefined : json['placeName'],
+        'latitude': json['latitude'] == null ? undefined : json['latitude'],
+        'longitude': json['longitude'] == null ? undefined : json['longitude'],
+        'cost': json['cost'] == null ? undefined : json['cost'],
     };
 }
 
@@ -63,6 +91,10 @@ export function RoutePlaceDtoToJSON(value?: RoutePlaceDto | null): any {
         
         'placePosition': value['placePosition'],
         'placeId': value['placeId'],
+        'placeName': value['placeName'],
+        'latitude': value['latitude'],
+        'longitude': value['longitude'],
+        'cost': value['cost'],
     };
 }
 

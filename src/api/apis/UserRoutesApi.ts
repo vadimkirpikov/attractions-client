@@ -17,12 +17,15 @@ import * as runtime from '../runtime';
 import type {
   UserRoute,
   UserRouteDto,
+  UserRouteDtoReq,
 } from '../models/index';
 import {
     UserRouteFromJSON,
     UserRouteToJSON,
     UserRouteDtoFromJSON,
     UserRouteDtoToJSON,
+    UserRouteDtoReqFromJSON,
+    UserRouteDtoReqToJSON,
 } from '../models/index';
 
 export interface V1RoutesFullInfoIdGetRequest {
@@ -35,11 +38,11 @@ export interface V1RoutesIdDeleteRequest {
 
 export interface V1RoutesIdPutRequest {
     id: string;
-    userRouteDto?: UserRouteDto;
+    userRouteDtoReq?: UserRouteDtoReq;
 }
 
 export interface V1RoutesPostRequest {
-    userRouteDto?: UserRouteDto;
+    userRouteDtoReq?: UserRouteDtoReq;
 }
 
 /**
@@ -49,7 +52,7 @@ export class UserRoutesApi extends runtime.BaseAPI {
 
     /**
      */
-    async v1RoutesFullInfoIdGetRaw(requestParameters: V1RoutesFullInfoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserRoute>> {
+    async v1RoutesFullInfoIdGetRaw(requestParameters: V1RoutesFullInfoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserRouteDto>> {
         if (requestParameters['id'] == null) {
             throw new runtime.RequiredError(
                 'id',
@@ -76,12 +79,12 @@ export class UserRoutesApi extends runtime.BaseAPI {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UserRouteFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserRouteDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async v1RoutesFullInfoIdGet(requestParameters: V1RoutesFullInfoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserRoute> {
+    async v1RoutesFullInfoIdGet(requestParameters: V1RoutesFullInfoIdGetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserRouteDto> {
         const response = await this.v1RoutesFullInfoIdGetRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -153,7 +156,7 @@ export class UserRoutesApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UserRouteDtoToJSON(requestParameters['userRouteDto']),
+            body: UserRouteDtoReqToJSON(requestParameters['userRouteDtoReq']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);
@@ -187,7 +190,7 @@ export class UserRoutesApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UserRouteDtoToJSON(requestParameters['userRouteDto']),
+            body: UserRouteDtoReqToJSON(requestParameters['userRouteDtoReq']),
         }, initOverrides);
 
         return new runtime.VoidApiResponse(response);

@@ -14,9 +14,11 @@ models/PlaceDto.ts
 models/RegisterDto.ts
 models/RoutePlace.ts
 models/RoutePlaceDto.ts
+models/RoutePlaceDtoReq.ts
 models/TokenDto.ts
 models/User.ts
 models/UserRoute.ts
 models/UserRouteDto.ts
+models/UserRouteDtoReq.ts
 models/index.ts
 runtime.ts

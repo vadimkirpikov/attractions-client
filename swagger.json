@@ -1,14 +1,14 @@
 {
   "openapi": "3.0.1",
+  "info": {
+    "title": "TouristServer",
+    "version": "1.0"
+  },
   "servers": [
     {
       "url": "http://localhost:8080"
     }
   ],
-  "info": {
-    "title": "TouristServer",
-    "version": "1.0"
-  },
   "paths": {
     "/v1/auth/login": {
       "post": {
@@ -471,17 +471,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserRoute"
+                  "$ref": "#/components/schemas/UserRouteDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserRoute"
+                  "$ref": "#/components/schemas/UserRouteDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserRoute"
+                  "$ref": "#/components/schemas/UserRouteDto"
                 }
               }
             }
@@ -498,17 +498,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             }
           }
@@ -541,17 +541,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserRouteDto"
+                "$ref": "#/components/schemas/UserRouteDtoReq"
               }
             }
           }
@@ -857,6 +857,38 @@
           "placeId": {
             "type": "string",
             "format": "uuid"
+          },
+          "placeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoutePlaceDtoReq": {
+        "type": "object",
+        "properties": {
+          "placePosition": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "placeId": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "additionalProperties": false
@@ -947,6 +979,23 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RoutePlaceDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserRouteDtoReq": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "routePlaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlaceDtoReq"
             },
             "nullable": true
           }

@@ -30,7 +30,7 @@ export interface PlaceDto {
      * @type {Array<string>}
      * @memberof PlaceDto
      */
-    photosUrl?: Array<string>;
+    photosUrl?: Array<string> | null;
     /**
      * 
      * @type {string}
