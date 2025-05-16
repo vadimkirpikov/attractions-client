@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react"; // Import React and useCallback
+import React, { useEffect, useState, useCallback } from "react";
 import { Configuration, FilterDto, PlaceDto, PlacesApi } from "../api";
 import getAccessToken from "../Utils/getAcessToken.ts";
 import tryRefreshToken from "../Utils/tokenRefresher.ts";
 import PlaceCard from "./PlaceCard.tsx";
-import Filter from "./Filter.tsx"; // Keep Filter import
+import Filter from "./Filter.tsx";
+import {PlaceAdditionInfo} from "../UserRoutes/EditorForm.tsx";
 
 interface PlaceListProps {
     isPreview: boolean,
     exceptIds: Array<string>,
-    additionCallBack: (id: string) => void,
+    additionCallBack?: (placeInfo: PlaceAdditionInfo) => void,
 }
 const PlaceList: React.FC<PlaceListProps> = ({isPreview, exceptIds, additionCallBack}: PlaceListProps) => {
     const [places, setPlaces] = useState<PlaceDto[]>([]);
@@ -93,6 +94,9 @@ const PlaceList: React.FC<PlaceListProps> = ({isPreview, exceptIds, additionCall
                                                 photoUrl={place.photosUrl[0]}
                                                 isPreview={isPreview}
                                                 addCallBack={additionCallBack}
+                                                cost={place.cost as number}
+                                                latitude={place.latitude as number}
+                                                longitude={place.longitude as number}
                                             />
                                         </div>
                                     ) : null

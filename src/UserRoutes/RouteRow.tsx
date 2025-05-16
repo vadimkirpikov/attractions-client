@@ -46,7 +46,7 @@ const RouteRow: React.FC<RouteRowProps> = ({ index, id, name, onDelete }) => {
             </td>
             <td>
                 <button type="button" className="btn btn-primary" onClick={handleCheck}>
-                    Просмотр
+                    Редактировать
                 </button>
             </td>
         </tr>

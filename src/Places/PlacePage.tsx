@@ -1,15 +1,27 @@
-import React, { useEffect, useState, useCallback } from "react"; // Import React and useCallback
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Configuration, PlaceDto, PlacesApi } from "../api";
 import getAccessToken from "../Utils/getAcessToken.ts";
 import tryRefreshToken from "../Utils/tokenRefresher.ts";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L, { LatLngExpression } from 'leaflet';
+
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+    iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 
 const PlacePage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [place, setPlace] = useState<PlaceDto | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null); 
 
     const fetchPlace = useCallback(async () => {
         if (!id) {
@@ -20,13 +32,14 @@ const PlacePage: React.FC = () => {
 
         setIsLoading(true);
         setError(null);
-        setPlace(null);
+        setPlace(null); 
 
         const config = new Configuration({
-            accessToken: getAccessToken,
+            accessToken: getAccessToken, 
         });
         const placesApi = new PlacesApi(config);
 
+        
         const attemptFetch = async () => {
             return await placesApi.v1PlacesPlaceIdGet({ placeId: id });
         }
@@ -35,17 +48,20 @@ const PlacePage: React.FC = () => {
             console.log(`Fetching place with ID: ${id}`);
             const fetchedPlace = await attemptFetch();
             setPlace(fetchedPlace);
-        } catch (err: any) {
+        } catch (err: any) { 
             console.error("API Error fetching place:", err);
             if (err.response && err.response.status === 401) {
                 console.log("Caught 401, attempting token refresh...");
                 try {
-                    await tryRefreshToken(error);
+                    
+                    await tryRefreshToken(err);
+                    
                     const fetchedPlace = await attemptFetch();
                     setPlace(fetchedPlace);
-                } catch (refreshError) {
-                    console.error("Error during token refresh:", refreshError);
+                } catch (refreshError: any) { 
+                    console.error("Error during token refresh or subsequent fetch:", refreshError);
                     setError("Ошибка обновления сессии. Пожалуйста, войдите снова.");
+                    
                 }
             } else {
                 if (err.response && err.response.status === 404) {
@@ -57,13 +73,13 @@ const PlacePage: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [id]);
+    }, [id]); 
 
     useEffect(() => {
         fetchPlace();
     }, [fetchPlace]);
 
-    // --- Rendering Logic ---
+    
 
     if (isLoading) {
         return (
@@ -100,20 +116,27 @@ const PlacePage: React.FC = () => {
         ? `${place.cost.toLocaleString('ru-RU')} ₽`
         : 'Бесплатно или цена не указана';
 
+    
+    const canShowMap = typeof place.latitude === 'number' && typeof place.longitude === 'number';
+    const placeCoordinates: LatLngExpression | undefined = canShowMap
+        ? [place.latitude!, place.longitude!]
+        : undefined;
+
     return (
         <div className="container mt-4 mb-5">
             <div className="row">
+                
                 <div className="col-md-6 mb-4 mb-md-0">
                     {place.photosUrl && place.photosUrl.length > 0 ? (
                         <div className="row g-2">
                             {place.photosUrl.map((photo, index) => (
-                                photo ? (
+                                photo ? ( 
                                     <div className="col-6" key={index}>
                                         <img
                                             src={photo}
                                             alt={`${place.name ?? 'Место'} - Фото ${index + 1}`}
                                             className="img-fluid rounded"
-                                            style={{ maxHeight: '250px', width: '100%', objectFit: 'cover' }}
+                                            style={{ height: '250px', width: '100%', objectFit: 'cover' }}
                                         />
                                     </div>
                                 ) : null
@@ -126,6 +149,7 @@ const PlacePage: React.FC = () => {
                     )}
                 </div>
 
+                
                 <div className="col-md-6">
                     <h1 className="mb-3">{place.name ?? 'Название не указано'}</h1>
 
@@ -150,24 +174,60 @@ const PlacePage: React.FC = () => {
                         <p className="fs-5">{formattedCost}</p>
                     </div>
 
-                    {place.latitude && place.longitude && (
-                        <div className="mb-4">
-                            <h4>Местоположение</h4>
+                    
+                    {canShowMap && (
+                        <div className="mb-3"> 
+                            <h4>Местоположение (ссылка)</h4>
                             <a
                                 href={`https://yandex.ru/maps/?pt=${place.longitude},${place.latitude}&z=16&l=map`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn btn-outline-primary btn-sm"
                             >
-                                Посмотреть на карте (Yandex)
+                                Посмотреть на Яндекс.Картах
                             </a>
                             <span className="ms-2 text-muted small">
-                                ({place.latitude.toFixed(4)}, {place.longitude.toFixed(4)})
+                                ({place.latitude!.toFixed(4)}, {place.longitude!.toFixed(4)})
                             </span>
                         </div>
                     )}
                 </div>
-            </div>
+            </div> 
+
+            
+            {canShowMap && placeCoordinates && (
+                <div className="row mt-4">
+                    <div className="col-12">
+                        <div className="card shadow-sm">
+                            <div className="card-header">
+                                <h5 className="mb-0">Местоположение на карте</h5>
+                            </div>
+                            
+                            <div className="card-body p-0" style={{ height: '400px', width: '100%', borderRadius: '0 0 .25rem .25rem', overflow: 'hidden' }}>
+                                <MapContainer
+                                    center={placeCoordinates}
+                                    zoom={15} 
+                                    scrollWheelZoom={true}
+                                    style={{ height: "100%", width: "100%" }}
+                                >
+                                    <TileLayer
+                                        attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker position={placeCoordinates}>
+                                        <Popup>
+                                            <b>{place.name ?? 'Местоположение'}</b>
+                                            
+                                            
+                                            <br/>Координаты: ({place.latitude!.toFixed(4)}, {place.longitude!.toFixed(4)})
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

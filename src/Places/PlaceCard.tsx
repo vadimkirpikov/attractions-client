@@ -1,15 +1,19 @@
 import React from "react"; // Import React
 import {useNavigate} from "react-router-dom";
+import {PlaceAdditionInfo} from "../UserRoutes/EditorForm.tsx";
 
 interface PlaceCardDto {
     id?: string | null,
     name?: string | null,
     photoUrl: string,
     isPreview?: boolean,
-    addCallBack: (id: string) => void;
+    cost: number,
+    addCallBack?: (placeInfo: PlaceAdditionInfo) => void,
+    latitude: number,
+    longitude: number
 }
 
-const PlaceCard: React.FC<PlaceCardDto> = ({id, name, photoUrl, isPreview = false, addCallBack}) => {
+const PlaceCard: React.FC<PlaceCardDto> = ({id, name, cost, photoUrl, latitude, longitude, isPreview = false, addCallBack}) => {
     const navigate = useNavigate();
 
     const redirectToPlaceDetails = () => {
@@ -18,7 +22,8 @@ const PlaceCard: React.FC<PlaceCardDto> = ({id, name, photoUrl, isPreview = fals
         }
     };
     const handleAddition = () => {
-        addCallBack(id as string);
+        const f = addCallBack as (placeInfo: PlaceAdditionInfo) => void;
+        f({id: id as string, name: name as string, cost: cost, latitude: latitude, longitude: longitude});
     }
 
     return (
