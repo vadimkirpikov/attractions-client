@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Link } from 'react-router-dom';
-import { AuthApi } from '../api'; // путь к API клиенту
-import { LoginDto } from '../api'; // путь к моделям
+import { AuthApi } from '../api';
+import { LoginDto } from '../api';
 import { useDispatch } from 'react-redux';
 import { AppDispatch} from "../state/authSlice.ts";
 import {login} from "../state/store.ts";
@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
             };
 
             const token = await api.v1AuthLoginPost({ loginDto }, requestInit);
-            dispatch(login(token.token))
+            dispatch(login(token.token as string))
             navigate("/dashboard");
         } catch (err: any) {
             setError('Ошибка входа. Проверьте введённые данные.');
